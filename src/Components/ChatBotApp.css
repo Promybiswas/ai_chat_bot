@@ -95,8 +95,9 @@
 .chat-title h3 {
     font-family: exo 2, sans-serif;
     font-size: 1.8rem;
-    color: #eee;
+    color: #7b8ebc;
     font-weight: 600;
+    text-transform: uppercase;
 }
 
 .chat-title i {
