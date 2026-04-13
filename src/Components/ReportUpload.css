@@ -1,0 +1,139 @@
+.report-upload {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.drop-zone {
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.drop-zone:hover,
+.drop-zone.active {
+  border-color: #0056b3;
+  background: #e7f1ff;
+  transform: scale(1.01);
+}
+
+.drop-zone i {
+  font-size: 48px;
+  color: #007bff;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.drop-zone p {
+  margin: 10px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.drop-zone p.small {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.file-label {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.file-label:hover {
+  background: #0056b3;
+}
+
+.file-label input {
+  display: none;
+}
+
+.file-label input:disabled ~ span {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reports-list {
+  margin-top: 10px;
+}
+
+.reports-list h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.report-item {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.report-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.report-info {
+  flex: 1;
+}
+
+.report-info h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.report-info p {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.status.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.processing {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.pending {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.status.failed {
+  background: #f8d7da;
+  color: #721c24;
+}
