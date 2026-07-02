@@ -2,10 +2,10 @@ import React from 'react'
 import Navbar from './Navbar'
 import './ChatBotStart.css'
 
-const ChatBotStart = ({ onStartChat }) => {
+const ChatBotStart = ({ onStartChat, onSignIn, onSignUp, onLogout }) => {
   return (
     <>
-      <Navbar />
+      <Navbar onSignIn={onSignIn} onSignUp={onSignUp} onLogout={onLogout} />
       <div className="start-page">
         {/* Hero Section */}
         <section className="hero">
@@ -20,10 +20,6 @@ const ChatBotStart = ({ onStartChat }) => {
                 <button className="btn-primary" onClick={onStartChat}>
                   Start Chatting
                   <i className="bx bx-arrow-right"></i>
-                </button>
-                <button className="btn-secondary">
-                  <i className="bx bx-play-circle"></i>
-                  Watch Demo
                 </button>
               </div>
             </div>

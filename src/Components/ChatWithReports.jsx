@@ -63,8 +63,8 @@ const ChatWithReports = ({ onGoBack }) => {
 
   return (
     <div className="chat-with-reports">
-      <div className="sidebar">
-        <div className="sidebar-header">
+      <div className="reports-sidebar">
+        <div className="reports-sidebar-header">
           <h2>Medical Reports</h2>
           <button
             className="btn-add"
