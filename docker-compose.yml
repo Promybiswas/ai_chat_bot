@@ -1,0 +1,12 @@
+services:
+  backend:
+    build: ./backend
+    container_name: carechat-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      # Persist uploaded report files across container restarts
+      - ./backend/uploads:/app/uploads
+    restart: unless-stopped

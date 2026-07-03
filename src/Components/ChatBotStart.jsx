@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from './Navbar'
 import './ChatBotStart.css'
+import './AboutContact.css'
 
 const ChatBotStart = ({ onStartChat, onSignIn, onSignUp, onLogout }) => {
+  const [contact, setContact] = useState({ name: '', email: '', message: '' })
+  const [sent, setSent] = useState(false)
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault()
+    setSent(true)
+    setContact({ name: '', email: '', message: '' })
+    setTimeout(() => setSent(false), 4000)
+  }
+
   return (
     <>
       <Navbar onSignIn={onSignIn} onSignUp={onSignUp} onLogout={onLogout} />
@@ -105,33 +116,142 @@ const ChatBotStart = ({ onStartChat, onSignIn, onSignUp, onLogout }) => {
             <div className="steps">
               <div className="step">
                 <div className="step-number">1</div>
-                <h3>Upload Report</h3>
-                <p>Share your medical document securely</p>
+                <h3>Create Your Account</h3>
+                <p>Sign up free and set up your personal health profile</p>
               </div>
               <div className="step-arrow">
                 <i className="bx bx-arrow-to-right"></i>
               </div>
               <div className="step">
                 <div className="step-number">2</div>
-                <h3>AI Analysis</h3>
-                <p>AI processes and understands your report</p>
+                <h3>Upload Reports</h3>
+                <p>Add your medical PDFs — our AI reads and understands them instantly</p>
               </div>
               <div className="step-arrow">
                 <i className="bx bx-arrow-to-right"></i>
               </div>
               <div className="step">
                 <div className="step-number">3</div>
-                <h3>Ask Questions</h3>
-                <p>Chat with AI about your medical data</p>
+                <h3>Chat with AI</h3>
+                <p>Ask questions and get clear, plain-language explanations of your results</p>
               </div>
               <div className="step-arrow">
                 <i className="bx bx-arrow-to-right"></i>
               </div>
               <div className="step">
                 <div className="step-number">4</div>
-                <h3>Get Insights</h3>
-                <p>Receive clear, understandable explanations</p>
+                <h3>Track Your Health</h3>
+                <p>Manage appointments and monitor your vitals from one dashboard</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="about-section">
+          <div className="about-container">
+            <h2>About CareChat</h2>
+            <p className="section-subtitle">Making your health information easy to understand</p>
+            <div className="about-content">
+              <div className="about-text">
+                <p>
+                  CareChat was built on a simple belief: understanding your own health
+                  shouldn't require a medical degree. Lab reports are full of numbers and
+                  jargon that leave most people confused and anxious.
+                </p>
+                <p>
+                  We combine advanced AI with a clean, secure platform so you can upload
+                  your medical reports and get clear, plain-language explanations in seconds —
+                  while keeping track of your appointments and vitals all in one place.
+                </p>
+                <p>
+                  CareChat is here to help you understand, not to replace your doctor. Always
+                  consult a healthcare professional for diagnosis and treatment.
+                </p>
+              </div>
+              <div className="about-highlights">
+                <div className="about-highlight">
+                  <i className="bx bx-bot"></i>
+                  <h4>AI-Powered</h4>
+                  <p>Reads and explains your reports instantly</p>
+                </div>
+                <div className="about-highlight">
+                  <i className="bx bxs-lock-alt"></i>
+                  <h4>Private &amp; Secure</h4>
+                  <p>Your data stays protected and yours alone</p>
+                </div>
+                <div className="about-highlight">
+                  <i className="bx bx-heart"></i>
+                  <h4>All-in-One</h4>
+                  <p>Reports, appointments, and vitals together</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="contact-section">
+          <div className="contact-container">
+            <h2>Get in Touch</h2>
+            <p className="section-subtitle">Questions or feedback? We'd love to hear from you</p>
+            <div className="contact-grid">
+              <div className="contact-info">
+                <div className="contact-item">
+                  <i className="bx bx-envelope"></i>
+                  <div>
+                    <h4>Email</h4>
+                    <p>support@carechat.com</p>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <i className="bx bx-phone"></i>
+                  <div>
+                    <h4>Phone</h4>
+                    <p>+1 (555) 123-4567</p>
+                  </div>
+                </div>
+                <div className="contact-item">
+                  <i className="bx bx-map"></i>
+                  <div>
+                    <h4>Location</h4>
+                    <p>Remote — available worldwide</p>
+                  </div>
+                </div>
+              </div>
+
+              <form className="contact-form" onSubmit={handleContactSubmit}>
+                {sent && (
+                  <div className="contact-success">
+                    <i className="bx bx-check-circle"></i> Thanks! Your message has been sent.
+                  </div>
+                )}
+                <div className="contact-field">
+                  <label>Name</label>
+                  <input
+                    type="text" placeholder="Your name" required
+                    value={contact.name}
+                    onChange={e => setContact({ ...contact, name: e.target.value })}
+                  />
+                </div>
+                <div className="contact-field">
+                  <label>Email</label>
+                  <input
+                    type="email" placeholder="you@example.com" required
+                    value={contact.email}
+                    onChange={e => setContact({ ...contact, email: e.target.value })}
+                  />
+                </div>
+                <div className="contact-field">
+                  <label>Message</label>
+                  <textarea
+                    rows={4} placeholder="How can we help?" required
+                    value={contact.message}
+                    onChange={e => setContact({ ...contact, message: e.target.value })}
+                  />
+                </div>
+                <button type="submit" className="contact-submit">Send Message</button>
+              </form>
             </div>
           </div>
         </section>
