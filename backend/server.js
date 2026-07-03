@@ -14,6 +14,7 @@ app.use('/api/auth',           require('./routes/auth'))
 app.use('/api/reports',        require('./routes/reports'))
 app.use('/api/appointments',   require('./routes/appointments'))
 app.use('/api/health-records', require('./routes/health'))
+app.use('/api/chat',           require('./routes/chat'))
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
 

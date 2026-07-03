@@ -31,25 +31,21 @@ const ReportUpload = ({ onReportUploaded, reports }) => {
   const uploadFile = async (file) => {
     try {
       setUploading(true)
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 1500))
 
-      // Mock: Create new report
-      const newReport = {
-        _id: Date.now().toString(),
-        fileName: file.name,
-        uploadedAt: new Date(),
-        processingStatus: 'processing',
-        fileSize: file.size
-      }
+      const formData = new FormData()
+      formData.append('file', file)
 
-      onReportUploaded(newReport)
-      alert('Report uploaded! Processing started...')
+      const res = await fetch('/api/reports/upload', {
+        method: 'POST',
+        // No Content-Type here — the browser sets the multipart boundary
+        headers: { Authorization: `Bearer ${localStorage.getItem('carechat_token')}` },
+        body: formData,
+      })
 
-      // Simulate processing completion
-      setTimeout(() => {
-        onReportUploaded({ ...newReport, processingStatus: 'completed' })
-      }, 3000)
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Upload failed')
+
+      onReportUploaded(data.report)
     } catch (error) {
       alert('Upload failed: ' + error.message)
     } finally {
@@ -67,7 +63,7 @@ const ReportUpload = ({ onReportUploaded, reports }) => {
         onDrop={handleDrop}
       >
         {uploading ? (
-          <p>Uploading...</p>
+          <p>Uploading & reading your report...</p>
         ) : (
           <>
             <i className="bx bx-cloud-upload"></i>
@@ -82,6 +78,7 @@ const ReportUpload = ({ onReportUploaded, reports }) => {
               />
               Browse Files
             </label>
+            <p className="small">PDF works best (text is read for the AI)</p>
           </>
         )}
       </div>
@@ -93,10 +90,8 @@ const ReportUpload = ({ onReportUploaded, reports }) => {
             <div key={report._id} className="report-item">
               <div className="report-info">
                 <h4>{report.fileName}</h4>
-                <p>{new Date(report.uploadedAt).toLocaleDateString()}</p>
-                <span className={`status ${report.processingStatus}`}>
-                  {report.processingStatus}
-                </span>
+                <p>{new Date(report.reportDate || report.createdAt).toLocaleDateString()}</p>
+                <span className="status completed">{report.reportType || 'Report'}</span>
               </div>
             </div>
           ))}

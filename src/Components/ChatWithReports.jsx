@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReportUpload from './ReportUpload'
-import { mockReports, mockChatMessages } from '../mockData'
+import { api } from '../utils/api'
 import './ChatWithReports.css'
 
 const ChatWithReports = ({ onGoBack }) => {
-  const [messages, setMessages] = useState(mockChatMessages)
+  const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [reports, setReports] = useState(mockReports)
+  const [reports, setReports] = useState([])
   const [showUpload, setShowUpload] = useState(false)
   const messagesEndRef = useRef(null)
 
@@ -18,6 +18,13 @@ const ChatWithReports = ({ onGoBack }) => {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Load the user's real reports from the backend
+  useEffect(() => {
+    api.get('/reports')
+      .then(d => setReports(d.reports || []))
+      .catch(console.error)
+  }, [])
 
   const handleAddReport = (newReport) => {
     setReports(prev => {
@@ -35,6 +42,7 @@ const ChatWithReports = ({ onGoBack }) => {
 
     const userMessage = input
     setInput('')
+    const priorMessages = messages
     setMessages(prev => [...prev, {
       role: 'user',
       content: userMessage,
@@ -42,23 +50,26 @@ const ChatWithReports = ({ onGoBack }) => {
     }])
     setLoading(true)
 
-    // Simulate AI response delay
-    setTimeout(() => {
-      const mockResponses = [
-        `Based on your medical documents, I can see that your results are generally within normal ranges. The findings suggest...`,
-        `Looking at your report data, your levels appear stable. Here's what the key metrics indicate...`,
-        `From the information in your uploaded reports, I can explain that these values mean...`
-      ]
-      const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)]
-
+    try {
+      const data = await api.post('/chat', {
+        message: userMessage,
+        history: priorMessages.map(m => ({ role: m.role, content: m.content }))
+      })
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: randomResponse,
-        sources: reports.filter(r => r.processingStatus === 'completed').map(r => r._id),
+        content: data.reply,
+        sources: data.sources,
         timestamp: new Date()
       }])
+    } catch (err) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `⚠️ ${err.message}`,
+        timestamp: new Date()
+      }])
+    } finally {
       setLoading(false)
-    }, 1500)
+    }
   }
 
   return (
@@ -86,13 +97,15 @@ const ChatWithReports = ({ onGoBack }) => {
           <div className="reports-quick-list">
             {reports.map(report => (
               <div key={report._id} className="report-quick-item">
-                <i className="bx bx-file"></i>
+                <i className="bx bxs-report"></i>
                 <div>
                   <p className="name">{report.fileName}</p>
-                  <p className="date">{new Date(report.uploadedAt).toLocaleDateString()}</p>
-                  <p className={`status-badge ${report.processingStatus}`}>
-                    {report.processingStatus}
+                  <p className="date">
+                    {new Date(report.reportDate || report.createdAt).toLocaleDateString()}
                   </p>
+                  <span className="status-badge" style={{ background: '#ede9fe', color: '#6d28d9' }}>
+                    {report.reportType}
+                  </span>
                 </div>
               </div>
             ))}
@@ -118,7 +131,7 @@ const ChatWithReports = ({ onGoBack }) => {
           {messages.length === 0 ? (
             <div className="empty-state">
               <i className="bx bx-chat"></i>
-              <p>Start by uploading a medical report, then ask me anything!</p>
+              <p>Ask me anything about your medical reports!</p>
             </div>
           ) : (
             messages.map((msg, idx) => (
